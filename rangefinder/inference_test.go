@@ -17,6 +17,7 @@ import (
 	"github.com/domino14/macondo/game"
 	"github.com/domino14/macondo/gen/api/proto/macondo"
 	"github.com/domino14/macondo/move"
+	"github.com/domino14/macondo/variant"
 )
 
 var DefaultConfig = config.DefaultConfig()
@@ -39,7 +40,7 @@ func TestInferTilePlay(t *testing.T) {
 		{Nickname: "JD", RealName: "Jesse"},
 		{Nickname: "cesar", RealName: "César"},
 	}
-	rules, err := game.NewBasicGameRules(&DefaultConfig, lex, board.CrosswordGameLayout, "English", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, lex, board.CrosswordGameLayout, "English", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 	game, err := game.NewGame(rules, players)
 	is.NoErr(err)
@@ -86,7 +87,7 @@ func TestInferExchange(t *testing.T) {
 		{Nickname: "Joel", RealName: "Joel"},
 		{Nickname: "Nigel", RealName: "Nigel"},
 	}
-	rules, err := game.NewBasicGameRules(&DefaultConfig, lex, board.CrosswordGameLayout, "English", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, lex, board.CrosswordGameLayout, "English", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 	game, err := game.NewGame(rules, players)
 	is.NoErr(err)
@@ -142,7 +143,7 @@ func TestInferSingle(t *testing.T) {
 		{Nickname: "JD", RealName: "Jesse"},
 		{Nickname: "cesar", RealName: "César"},
 	}
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL20", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL20", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 	game, err := game.NewGame(rules, players)
 	is.NoErr(err)

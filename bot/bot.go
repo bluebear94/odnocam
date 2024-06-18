@@ -27,6 +27,7 @@ import (
 	pb "github.com/domino14/macondo/gen/api/proto/macondo"
 	"github.com/domino14/macondo/move"
 	"github.com/domino14/macondo/turnplayer"
+	"github.com/domino14/macondo/variant"
 )
 
 type LambdaEvent struct {
@@ -217,7 +218,9 @@ func (b *Bot) handle(data []byte) *pb.BotResponse {
 		// Generate all possible moves.
 		return b.evaluationResponse(evalReq)
 	}
-	isWordSmog := g.Rules().Variant() == game.VarWordSmog || g.Rules().Variant() == game.VarWordSmogSuper
+	isWordSmog := g.Rules().Variant() == variant.VarWordSmog || g.Rules().Variant() == variant.VarWordSmogSuper
+	// TODO: use this
+	// isGmo := g.Rules().Variant() == variant.VarGmo
 	// See if we need to challenge the last move
 	valid := true
 	if g.LastEvent() != nil && g.LastEvent().Type == pb.GameEvent_TILE_PLACEMENT_MOVE {

@@ -23,6 +23,7 @@ import (
 	pb "github.com/domino14/macondo/gen/api/proto/macondo"
 	"github.com/domino14/macondo/movegen"
 	"github.com/domino14/macondo/turnplayer"
+	"github.com/domino14/macondo/variant"
 )
 
 var DefaultConfig = config.DefaultConfig()
@@ -44,7 +45,7 @@ func TestSimSingleIteration(t *testing.T) {
 		{Nickname: "JD", RealName: "Jesse"},
 		{Nickname: "cesar", RealName: "César"},
 	}
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 	game, err := game.NewGame(rules, players)
 	is.NoErr(err)
@@ -130,7 +131,7 @@ func TestLongerSim(t *testing.T) {
 		{Nickname: "JD", RealName: "Jesse"},
 		{Nickname: "cesar", RealName: "César"},
 	}
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 	game, err := game.NewGame(rules, players)
 	is.NoErr(err)

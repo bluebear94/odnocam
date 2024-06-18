@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/domino14/macondo/board"
+	"github.com/domino14/macondo/variant"
 	"github.com/rs/zerolog/log"
 
 	pb "github.com/domino14/macondo/gen/api/proto/macondo"
@@ -11,7 +12,7 @@ import (
 
 // HistoryToVariant takes in a game history and returns the board configuration
 // and letter distribution name.
-func HistoryToVariant(h *pb.GameHistory) (boardLayoutName, letterDistributionName string, variant Variant) {
+func HistoryToVariant(h *pb.GameHistory) (boardLayoutName, letterDistributionName string, va variant.Variant) {
 	log.Debug().Interface("h", h).Msg("HistoryToVariant")
 	boardLayoutName = h.BoardLayout
 	letterDistributionName = h.LetterDistribution
@@ -43,6 +44,6 @@ func HistoryToVariant(h *pb.GameHistory) (boardLayoutName, letterDistributionNam
 			letterDistributionName += "_super"
 		}
 	}
-	variant = Variant(h.Variant)
+	va = variant.Variant(h.Variant)
 	return
 }

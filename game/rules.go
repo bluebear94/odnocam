@@ -10,17 +10,7 @@ import (
 	"github.com/domino14/macondo/config"
 	"github.com/domino14/macondo/cross_set"
 	"github.com/domino14/macondo/lexicon"
-)
-
-type Variant string
-
-const (
-	VarClassic  Variant = "classic"
-	VarWordSmog         = "wordsmog"
-	// Redundant information, but we are deciding to treat different board
-	// layouts as different variants.
-	VarClassicSuper  = "classic_super"
-	VarWordSmogSuper = "wordsmog_super"
+	"github.com/domino14/macondo/variant"
 )
 
 const (
@@ -36,7 +26,7 @@ type GameRules struct {
 	dist        *tilemapping.LetterDistribution
 	lexicon     lexicon.Lexicon
 	crossSetGen cross_set.Generator
-	variant     Variant
+	variant     variant.Variant
 	boardname   string
 	distname    string
 }
@@ -73,13 +63,13 @@ func (g GameRules) CrossSetGen() cross_set.Generator {
 	return g.crossSetGen
 }
 
-func (g GameRules) Variant() Variant {
+func (g GameRules) Variant() variant.Variant {
 	return g.variant
 }
 
 func NewBasicGameRules(cfg *config.Config,
 	lexiconName, boardLayoutName, letterDistributionName, csetGenName string,
-	variant Variant) (*GameRules, error) {
+	variant variant.Variant) (*GameRules, error) {
 
 	dist, err := tilemapping.GetDistribution(cfg.AllSettings(), letterDistributionName)
 	if err != nil {
@@ -90,6 +80,8 @@ func NewBasicGameRules(cfg *config.Config,
 	switch boardLayoutName {
 	case board.CrosswordGameLayout, "":
 		bd = board.CrosswordGameBoard
+	case board.CrosswordGameLayoutGmo:
+		bd = board.CrosswordGameBoardGmo
 	case board.SuperCrosswordGameLayout:
 		bd = board.SuperCrosswordGameBoard
 	default:

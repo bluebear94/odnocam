@@ -2,6 +2,7 @@ package game
 
 import (
 	"errors"
+	"slices"
 
 	"github.com/domino14/word-golib/tilemapping"
 	"github.com/rs/zerolog/log"
@@ -9,6 +10,7 @@ import (
 	pb "github.com/domino14/macondo/gen/api/proto/macondo"
 	"github.com/domino14/macondo/lexicon"
 	"github.com/domino14/macondo/move"
+	"github.com/domino14/macondo/variant"
 )
 
 var (
@@ -197,13 +199,18 @@ func (g *Game) ChallengeEvent(addlBonus int, millis int) (bool, error) {
 	return playLegal, err
 }
 
-func validateWords(lex lexicon.Lexicon, words []tilemapping.MachineWord, variant Variant) []string {
+func validateWords(lex lexicon.Lexicon, words []tilemapping.MachineWord, va variant.Variant) []string {
 	var illegalWords []string
 	alph := lex.GetAlphabet()
 	for _, word := range words {
 		var valid bool
-		if variant == VarWordSmog || variant == VarWordSmogSuper {
+		if va == variant.VarWordSmog || va == variant.VarWordSmogSuper {
 			valid = lex.HasAnagram(word)
+		} else if va == variant.VarGmo {
+			// TODO: should be possible to look up the word in reverse order directly instead of allocating a separate slice
+			reverse := slices.Clone(word)
+			slices.Reverse(word)
+			valid = lex.HasWord(word) || lex.HasWord(reverse)
 		} else {
 			valid = lex.HasWord(word)
 		}

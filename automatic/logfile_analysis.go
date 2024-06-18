@@ -18,6 +18,7 @@ import (
 	pb "github.com/domino14/macondo/gen/api/proto/macondo"
 	"github.com/domino14/macondo/stats"
 	"github.com/domino14/macondo/turnplayer"
+	"github.com/domino14/macondo/variant"
 )
 
 // AnalyzeLogFile analyzes the given game CSV file and spits out a bunch of
@@ -178,7 +179,7 @@ func ExportGCG(cfg *config.Config, filename, letterdist, lexicon, boardlayout, g
 	}
 
 	rules, err := game.NewBasicGameRules(cfg, lexicon, boardlayout,
-		letterdist, game.CrossScoreOnly, game.VarClassic)
+		letterdist, game.CrossScoreOnly, variant.VarClassic)
 	if err != nil {
 		return err
 	}
@@ -189,7 +190,7 @@ func ExportGCG(cfg *config.Config, filename, letterdist, lexicon, boardlayout, g
 
 	g, err := turnplayer.BaseTurnPlayerFromRules(&turnplayer.GameOptions{
 		BoardLayoutName: boardlayout,
-		Variant:         game.VarClassic,
+		Variant:         variant.VarClassic,
 	}, players, rules)
 	if err != nil {
 		return err

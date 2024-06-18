@@ -17,6 +17,7 @@ import (
 	"github.com/domino14/macondo/game"
 	"github.com/domino14/macondo/gcgio"
 	"github.com/domino14/macondo/move"
+	"github.com/domino14/macondo/variant"
 	"github.com/rs/zerolog"
 
 	pb "github.com/domino14/macondo/gen/api/proto/macondo"
@@ -146,7 +147,7 @@ func main() {
 }
 
 func getEquityLoss(filepath string, lexicon string, playerName string, gameid int, eqlossData *EqlossData) (float64, error) {
-	rules, err := game.NewBasicGameRules(&DefaultConfig, lexicon, board.CrosswordGameLayout, "english", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, lexicon, board.CrosswordGameLayout, "english", game.CrossScoreAndSet, variant.VarClassic)
 	if err != nil {
 		panic(err)
 	}

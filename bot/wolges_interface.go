@@ -12,8 +12,8 @@ import (
 
 	"github.com/domino14/macondo/ai/bot"
 	"github.com/domino14/macondo/config"
-	"github.com/domino14/macondo/game"
 	"github.com/domino14/macondo/move"
+	"github.com/domino14/macondo/variant"
 	"github.com/domino14/word-golib/tilemapping"
 	"github.com/rs/zerolog/log"
 )
@@ -92,19 +92,22 @@ func wolgesAnalyze(cfg *config.Config, g *bot.BotTurnPlayer) ([]*move.Move, erro
 	hasSuper := letterDistribution == "english" || letterDistribution == "catalan"
 	wap.Leave = wap.Lexicon
 	switch g.Rules().Variant() {
-	case "", game.VarClassic:
+	case "", variant.VarClassic:
 		wap.Rules = "CrosswordGame"
-	case game.VarWordSmog:
+	case variant.VarWordSmog:
 		wap.Rules = "WordSmog"
 		wap.Lexicon += ".WordSmog"
 		// assume always same leaves as classic
-	case game.VarClassicSuper:
+	case variant.VarGmo:
+		wap.Rules = "CrosswordGameGmo"
+		wap.Lexicon += ".Gmo"
+	case variant.VarClassicSuper:
 		wap.Rules = "CrosswordGameSuper"
 		// assume always same lexicon as classic
 		if hasSuper {
 			wap.Leave = "super-" + wap.Leave
 		}
-	case game.VarWordSmogSuper:
+	case variant.VarWordSmogSuper:
 		wap.Rules = "WordSmogSuper"
 		// assume always same lexicon as wordsmog
 		wap.Lexicon += ".WordSmog"

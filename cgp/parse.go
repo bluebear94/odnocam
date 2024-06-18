@@ -11,6 +11,7 @@ import (
 	"github.com/domino14/macondo/config"
 	"github.com/domino14/macondo/game"
 	pb "github.com/domino14/macondo/gen/api/proto/macondo"
+	"github.com/domino14/macondo/variant"
 	"github.com/domino14/word-golib/tilemapping"
 )
 
@@ -65,7 +66,7 @@ func ParseCGP(cfg *config.Config, cgpstr string) (*ParsedCGP, error) {
 	letterDistributionName := "english"
 	lexiconName := "NWL23"
 	maxScorelessTurns := game.DefaultMaxScorelessTurns
-	variant := game.VarClassic
+	va := variant.VarClassic
 	gid := ""
 	opcodes := map[string]string{}
 
@@ -117,7 +118,7 @@ func ParseCGP(cfg *config.Config, cgpstr string) (*ParsedCGP, error) {
 			if len(opWithParams) != 2 {
 				return nil, errors.New("wrong number of arguments for var operation")
 			}
-			variant = game.Variant(opWithParams[1])
+			va = variant.Variant(opWithParams[1])
 			opcodes["var"] = opWithParams[1]
 
 		case "tmr":
@@ -128,7 +129,7 @@ func ParseCGP(cfg *config.Config, cgpstr string) (*ParsedCGP, error) {
 	}
 
 	rules, err := game.NewBasicGameRules(cfg, lexiconName, boardLayoutName, letterDistributionName,
-		game.CrossScoreAndSet, variant)
+		game.CrossScoreAndSet, va)
 	if err != nil {
 		return nil, err
 	}

@@ -20,6 +20,7 @@ import (
 	"github.com/domino14/macondo/game"
 	pb "github.com/domino14/macondo/gen/api/proto/macondo"
 	"github.com/domino14/macondo/move"
+	"github.com/domino14/macondo/variant"
 )
 
 var MaxTimePerTurn = 15 * time.Second
@@ -66,7 +67,7 @@ type AutomaticRunnerPlayer struct {
 // Init initializes the runner
 func (r *GameRunner) Init(players []AutomaticRunnerPlayer) error {
 
-	rules, err := game.NewBasicGameRules(r.config, r.lexicon, board.CrosswordGameLayout, r.letterDistribution, game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(r.config, r.lexicon, board.CrosswordGameLayout, r.letterDistribution, game.CrossScoreAndSet, variant.VarClassic)
 	if err != nil {
 		return err
 	}

@@ -7,8 +7,8 @@ import (
 
 	"github.com/domino14/macondo/board"
 	"github.com/domino14/macondo/config"
-	"github.com/domino14/macondo/game"
 	pb "github.com/domino14/macondo/gen/api/proto/macondo"
+	"github.com/domino14/macondo/variant"
 	"github.com/rs/zerolog/log"
 )
 
@@ -25,7 +25,7 @@ type GameOptions struct {
 	Lexicon         *Lexicon
 	ChallengeRule   pb.ChallengeRule
 	BoardLayoutName string
-	Variant         game.Variant
+	Variant         variant.Variant
 }
 
 func (opts *GameOptions) SetDefaults(cfg *config.Config) {
@@ -38,7 +38,7 @@ func (opts *GameOptions) SetDefaults(cfg *config.Config) {
 		log.Info().Msgf("using default board layout %v", opts.BoardLayoutName)
 	}
 	if opts.Variant == "" {
-		opts.Variant = game.VarClassic
+		opts.Variant = variant.VarClassic
 	}
 }
 
@@ -78,14 +78,16 @@ func (opts *GameOptions) SetBoardLayoutName(name string) error {
 
 func (opts *GameOptions) SetVariant(name string) error {
 	switch name {
-	case string(game.VarClassic):
-		opts.Variant = game.VarClassic
-	case string(game.VarClassicSuper):
-		opts.Variant = game.VarClassicSuper
-	case string(game.VarWordSmog):
-		opts.Variant = game.VarWordSmog
-	case string(game.VarWordSmogSuper):
-		opts.Variant = game.VarWordSmogSuper
+	case string(variant.VarClassic):
+		opts.Variant = variant.VarClassic
+	case string(variant.VarClassicSuper):
+		opts.Variant = variant.VarClassicSuper
+	case string(variant.VarGmo):
+		opts.Variant = variant.VarGmo
+	case string(variant.VarWordSmog):
+		opts.Variant = variant.VarWordSmog
+	case string(variant.VarWordSmogSuper):
+		opts.Variant = variant.VarWordSmogSuper
 	default:
 		return fmt.Errorf("%v is not a supported variant name", name)
 	}

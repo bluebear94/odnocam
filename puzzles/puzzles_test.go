@@ -11,6 +11,7 @@ import (
 	"github.com/domino14/macondo/game"
 	"github.com/domino14/macondo/gcgio"
 	pb "github.com/domino14/macondo/gen/api/proto/macondo"
+	"github.com/domino14/macondo/variant"
 	"github.com/matryer/is"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -118,7 +119,7 @@ func TestPuzzleGeneration(t *testing.T) {
 	// Set the correct challenge rule
 	gameHistory.ChallengeRule = pb.ChallengeRule_FIVE_POINT
 
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "CSW21", board.CrosswordGameLayout, "english", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "CSW21", board.CrosswordGameLayout, "english", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 
 	game, err := game.NewFromHistory(gameHistory, rules, 0)
@@ -251,7 +252,7 @@ func TestLostChallenge(t *testing.T) {
 	// Set the correct challenge rule
 	gameHistory.ChallengeRule = pb.ChallengeRule_FIVE_POINT
 
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "CSW21", board.CrosswordGameLayout, "english", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "CSW21", board.CrosswordGameLayout, "english", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 
 	game, err := game.NewFromHistory(gameHistory, rules, 0)
@@ -273,7 +274,7 @@ func TestPhonyTilesReturned(t *testing.T) {
 	is.NoErr(err)
 	err = protojson.Unmarshal(bts, gh)
 	is.NoErr(err)
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "CSW21", board.CrosswordGameLayout, "english", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "CSW21", board.CrosswordGameLayout, "english", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 
 	game, err := game.NewFromHistory(gh, rules, 0)
@@ -297,7 +298,7 @@ func TestEquityLossLimit(t *testing.T) {
 	// Set the correct challenge rule
 	gameHistory.ChallengeRule = pb.ChallengeRule_DOUBLE
 
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "english", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "english", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 
 	game, err := game.NewFromHistory(gameHistory, rules, 0)
@@ -342,7 +343,7 @@ func TestIsPuzzleStillValid(t *testing.T) {
 	// Set the correct challenge rule
 	gameHistory.ChallengeRule = pb.ChallengeRule_DOUBLE
 
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "english", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "english", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 
 	game, err := game.NewFromHistory(gameHistory, rules, 0)
@@ -397,7 +398,7 @@ func puzzlesMatch(is *is.I, gcgfile string, puzzleGenerationReq *pb.PuzzleGenera
 	// so GCGs with challenges will load
 	gameHistory.ChallengeRule = pb.ChallengeRule_FIVE_POINT
 
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "CSW21", board.CrosswordGameLayout, "english", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "CSW21", board.CrosswordGameLayout, "english", game.CrossScoreAndSet, variant.VarClassic)
 	if err != nil {
 		panic(err)
 	}

@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"regexp"
 	"runtime"
+	"slices"
 
 	"github.com/domino14/word-golib/kwg"
 	"github.com/domino14/word-golib/tilemapping"
@@ -18,6 +19,7 @@ import (
 	"github.com/domino14/macondo/game"
 	pb "github.com/domino14/macondo/gen/api/proto/macondo"
 	"github.com/domino14/macondo/move"
+	"github.com/domino14/macondo/variant"
 )
 
 var PuzzleFunctions = []func(g *game.Game, moves []*move.Move) (bool, pb.PuzzleTag){
@@ -288,16 +290,21 @@ func isCELEvent(event *pb.GameEvent, history *pb.GameHistory, cfg *config.Config
 	return true, nil
 }
 
-func isPhony(k *kwg.KWG, word, variant string) (bool, error) {
+func isPhony(k *kwg.KWG, word, va string) (bool, error) {
 	lex := kwg.Lexicon{KWG: *k}
 	machineWord, err := tilemapping.ToMachineWord(word, lex.GetAlphabet())
 	if err != nil {
 		return false, err
 	}
 	var valid bool
-	switch string(variant) {
-	case string(game.VarWordSmog):
+	switch string(va) {
+	case string(variant.VarWordSmog):
 		valid = lex.HasAnagram(machineWord)
+	case string(variant.VarGmo):
+		// TODO: should be possible to look up the word in reverse order directly instead of allocating a separate slice
+		reverse := slices.Clone(machineWord)
+		slices.Reverse(machineWord)
+		valid = lex.HasWord(machineWord) || lex.HasWord(reverse)
 	default:
 		valid = lex.HasWord(machineWord)
 	}

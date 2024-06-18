@@ -11,6 +11,7 @@ import (
 	"github.com/domino14/macondo/gcgio"
 	pb "github.com/domino14/macondo/gen/api/proto/macondo"
 	"github.com/domino14/macondo/move"
+	"github.com/domino14/macondo/variant"
 )
 
 func TestChallengeVoid(t *testing.T) {
@@ -19,7 +20,7 @@ func TestChallengeVoid(t *testing.T) {
 		{Nickname: "JD", RealName: "Jesse"},
 		{Nickname: "cesar", RealName: "César"},
 	}
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 	game, err := game.NewGame(rules, players)
 	is.NoErr(err)
@@ -39,7 +40,7 @@ func TestChallengeDoubleIsLegal(t *testing.T) {
 		{Nickname: "JD", RealName: "Jesse"},
 		{Nickname: "cesar", RealName: "César"},
 	}
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 	g, _ := game.NewGame(rules, players)
 	alph := g.Alphabet()
@@ -65,7 +66,7 @@ func TestChallengeDoubleIsIllegal(t *testing.T) {
 		{Nickname: "JD", RealName: "Jesse"},
 		{Nickname: "cesar", RealName: "César"},
 	}
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 	g, _ := game.NewGame(rules, players)
 	alph := g.Alphabet()
@@ -92,7 +93,7 @@ func TestChallengeEndOfGamePlusFive(t *testing.T) {
 
 	gameHistory, err := gcgio.ParseGCG(&DefaultConfig, "../gcgio/testdata/some_isc_game.gcg")
 	is.NoErr(err)
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 
 	g, err := game.NewFromHistory(gameHistory, rules, 0)
@@ -121,7 +122,7 @@ func TestChallengeEndOfGamePhony(t *testing.T) {
 
 	gameHistory, err := gcgio.ParseGCG(&DefaultConfig, "../gcgio/testdata/some_isc_game.gcg")
 	is.NoErr(err)
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 
 	g, err := game.NewFromHistory(gameHistory, rules, 0)
@@ -154,7 +155,7 @@ func TestChallengeTripleUnsuccessful(t *testing.T) {
 		{Nickname: "JD", RealName: "Jesse"},
 		{Nickname: "cesar", RealName: "César"},
 	}
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 	g, _ := game.NewGame(rules, players)
 	alph := g.Alphabet()
@@ -181,7 +182,7 @@ func TestChallengeTripleSuccessful(t *testing.T) {
 		{Nickname: "JD", RealName: "Jesse"},
 		{Nickname: "cesar", RealName: "César"},
 	}
-	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, game.VarClassic)
+	rules, err := game.NewBasicGameRules(&DefaultConfig, "NWL18", board.CrosswordGameLayout, "English", game.CrossScoreAndSet, variant.VarClassic)
 	is.NoErr(err)
 	g, _ := game.NewGame(rules, players)
 	alph := g.Alphabet()
