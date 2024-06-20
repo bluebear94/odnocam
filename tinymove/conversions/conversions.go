@@ -7,8 +7,10 @@ import (
 	"github.com/domino14/word-golib/tilemapping"
 
 	"github.com/domino14/macondo/board"
+	"github.com/domino14/macondo/lexicon"
 	"github.com/domino14/macondo/move"
 	"github.com/domino14/macondo/tinymove"
+	"github.com/domino14/macondo/variant"
 )
 
 func SmallMoveToMove(sm tinymove.SmallMove, m *move.Move, tm *tilemapping.TileMapping,
@@ -135,7 +137,7 @@ func TinyMoveToMove(t tinymove.TinyMove, b *board.GameBoard, om *move.Move) {
 }
 
 func TinyMoveToFullMove(t tinymove.TinyMove, bd *board.GameBoard, ld *tilemapping.LetterDistribution,
-	onTurnRack *tilemapping.Rack) (*move.Move, error) {
+	onTurnRack *tilemapping.Rack, va variant.Variant, lex lexicon.Lexicon) (*move.Move, error) {
 
 	m := &move.Move{}
 	TinyMoveToMove(t, bd, m)
@@ -157,7 +159,7 @@ func TinyMoveToFullMove(t tinymove.TinyMove, bd *board.GameBoard, ld *tilemappin
 		bd.Transpose()
 	}
 
-	m.SetScore(bd.ScoreWord(m.Tiles(), r, c, m.TilesPlayed(), crossDir, ld))
+	m.SetScore(bd.ScoreWord(m.Tiles(), r, c, m.TilesPlayed(), crossDir, ld, va, lex))
 
 	if v {
 		bd.Transpose()

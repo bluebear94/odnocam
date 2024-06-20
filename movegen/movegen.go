@@ -20,8 +20,10 @@ import (
 	"github.com/domino14/macondo/equity"
 	"github.com/domino14/macondo/gaddag"
 	"github.com/domino14/macondo/game"
+	"github.com/domino14/macondo/lexicon"
 	"github.com/domino14/macondo/move"
 	"github.com/domino14/macondo/tinymove"
+	"github.com/domino14/macondo/variant"
 )
 
 type SortBy int
@@ -414,9 +416,9 @@ func (gen *GordonGenerator) crossDirection() board.BoardDirection {
 	return board.VerticalDirection
 }
 
-func (gen *GordonGenerator) scoreMove(word tilemapping.MachineWord, row, col, tilesPlayed int) int {
+func (gen *GordonGenerator) scoreMove(word tilemapping.MachineWord, row, col, tilesPlayed int, va variant.Variant, lex lexicon.Lexicon) int {
 
-	return gen.board.ScoreWord(word, row, col, tilesPlayed, gen.crossDirection(), gen.letterDistribution)
+	return gen.board.ScoreWord(word, row, col, tilesPlayed, gen.crossDirection(), gen.letterDistribution, va, lex)
 }
 
 // Plays returns the generator's generated plays.

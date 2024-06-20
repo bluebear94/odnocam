@@ -209,7 +209,7 @@ func validateWords(lex lexicon.Lexicon, words []tilemapping.MachineWord, va vari
 		} else if va == variant.VarGmo {
 			// TODO: should be possible to look up the word in reverse order directly instead of allocating a separate slice
 			reverse := slices.Clone(word)
-			slices.Reverse(word)
+			slices.Reverse(reverse)
 			valid = lex.HasWord(word) || lex.HasWord(reverse)
 		} else {
 			valid = lex.HasWord(word)

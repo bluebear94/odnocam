@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"slices"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -12,8 +13,10 @@ import (
 	"github.com/domino14/word-golib/tilemapping"
 	"github.com/rs/zerolog/log"
 
+	"github.com/domino14/macondo/lexicon"
 	"github.com/domino14/macondo/move"
 	"github.com/domino14/macondo/tinymove"
+	"github.com/domino14/macondo/variant"
 )
 
 var (
@@ -845,7 +848,9 @@ func (g *GameBoard) formedCrossWord(crossVertical bool, letter tilemapping.Machi
 // assume the row stays static as we iterate through the letters of the
 // word.
 func (g *GameBoard) ScoreWord(word tilemapping.MachineWord, row, col, tilesPlayed int,
-	crossDir BoardDirection, ld *tilemapping.LetterDistribution) int {
+	crossDir BoardDirection, ld *tilemapping.LetterDistribution, va variant.Variant, lex lexicon.Lexicon) int {
+
+	isGmo := va == variant.VarGmo
 
 	// letterScore:
 	var ls int
@@ -854,9 +859,16 @@ func (g *GameBoard) ScoreWord(word tilemapping.MachineWord, row, col, tilesPlaye
 	crossScores := 0
 	bingoBonus := 0
 	if tilesPlayed == 7 {
-		bingoBonus = 50
+		if isGmo {
+			bingoBonus = 35
+		} else {
+			bingoBonus = 50
+		}
 	}
 	wordMultiplier := 1
+	if isGmo {
+		wordMultiplier = 0 // Word bonuses are additive in Anadrome
+	}
 
 	for idx, ml := range word {
 		bonusSq := g.GetBonus(row, col+idx)
@@ -870,13 +882,10 @@ func (g *GameBoard) ScoreWord(word tilemapping.MachineWord, row, col, tilesPlaye
 			// Only count bonus if we are putting a fresh tile on it.
 			switch bonusSq {
 			case Bonus4WS:
-				wordMultiplier *= 4
 				thisWordMultiplier = 4
 			case Bonus3WS:
-				wordMultiplier *= 3
 				thisWordMultiplier = 3
 			case Bonus2WS:
-				wordMultiplier *= 2
 				thisWordMultiplier = 2
 			case Bonus2LS:
 				letterMultiplier = 2
@@ -884,6 +893,13 @@ func (g *GameBoard) ScoreWord(word tilemapping.MachineWord, row, col, tilesPlaye
 				letterMultiplier = 3
 			case Bonus4LS:
 				letterMultiplier = 4
+			}
+			if thisWordMultiplier > 1 {
+				if isGmo {
+					wordMultiplier += thisWordMultiplier
+				} else {
+					wordMultiplier *= thisWordMultiplier
+				}
 			}
 			// else all the multipliers are 1.
 		}
@@ -902,11 +918,49 @@ func (g *GameBoard) ScoreWord(word tilemapping.MachineWord, row, col, tilesPlaye
 		actualCrossWord := (row > 0 && g.HasLetter(row-1, col+idx)) || (row < g.Dim()-1 && g.HasLetter(row+1, col+idx))
 
 		if freshTile && actualCrossWord {
-			crossScores += ls*letterMultiplier*thisWordMultiplier + cs*thisWordMultiplier
+			crossWord := g.findCrossWordAt(row, col)
+			crossWordMultiplicity := getWordMultiplicity(isGmo, crossWord, lex)
+			crossScores += (ls*letterMultiplier*thisWordMultiplier + cs*thisWordMultiplier) * crossWordMultiplicity
 		}
 	}
-	return mainWordScore*wordMultiplier + crossScores + bingoBonus
+	if wordMultiplier == 0 {
+		wordMultiplier = 1
+	}
+	wordMultiplicity := getWordMultiplicity(isGmo, word, lex)
+	return mainWordScore*wordMultiplier*wordMultiplicity + crossScores + bingoBonus
 
+}
+
+func (g *GameBoard) findCrossWordAt(row, col int) tilemapping.MachineWord {
+	startRow := row
+	endRow := row
+	for startRow > 0 && g.HasLetter(startRow-1, col) {
+		startRow -= 1
+	}
+	for endRow < g.dim && g.HasLetter(endRow, col) {
+		endRow += 1
+	}
+	crossWord := make(tilemapping.MachineWord, endRow-startRow)
+	for i := range endRow - startRow {
+		crossWord[i] = g.GetLetter(startRow+i, col)
+	}
+	return crossWord
+}
+
+func getWordMultiplicity(isGmo bool, word tilemapping.MachineWord, lex lexicon.Lexicon) int {
+	if !isGmo {
+		return 1
+	}
+	result := 0
+	if lex.HasWord(word) {
+		result += 1
+	}
+	reverse := slices.Clone(word)
+	slices.Reverse(word)
+	if lex.HasWord(reverse) {
+		result += 1
+	}
+	return result
 }
 
 // Copy returns a deep copy of this board.

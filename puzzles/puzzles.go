@@ -303,7 +303,7 @@ func isPhony(k *kwg.KWG, word, va string) (bool, error) {
 	case string(variant.VarGmo):
 		// TODO: should be possible to look up the word in reverse order directly instead of allocating a separate slice
 		reverse := slices.Clone(machineWord)
-		slices.Reverse(machineWord)
+		slices.Reverse(reverse)
 		valid = lex.HasWord(machineWord) || lex.HasWord(reverse)
 	default:
 		valid = lex.HasWord(machineWord)
