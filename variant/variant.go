@@ -12,3 +12,10 @@ const (
 	// Anadrome variant
 	VarGmo Variant = "gmowords"
 )
+
+func (v Variant) GetBingoBonus() int {
+	if v == VarGmo {
+		return 35
+	}
+	return 50
+}

@@ -859,11 +859,7 @@ func (g *GameBoard) ScoreWord(word tilemapping.MachineWord, row, col, tilesPlaye
 	crossScores := 0
 	bingoBonus := 0
 	if tilesPlayed == 7 {
-		if isGmo {
-			bingoBonus = 35
-		} else {
-			bingoBonus = 50
-		}
+		bingoBonus = va.GetBingoBonus()
 	}
 	wordMultiplier := 1
 	if isGmo {
